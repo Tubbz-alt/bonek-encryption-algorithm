@@ -3,18 +3,17 @@
 
 /* using Singleton design pattern to avoid multiple creation of instance */
 
-#include "block.h"
 #include "global.h"
 
 struct Keygen {
   Keygen();
-  Block nextHexKey(Block);
-  Block nextByteKey(Block);
-  Block nextKey(Block, int);
+  byte* nextHexKey(byte*);
+  byte* nextByteKey(byte*);
+  byte* nextKey(byte*, int);
   
   static Keygen* instance;
-  Block byte_table;
-  Block hex_table;
+  byte* byte_table;
+  byte* hex_table;
 };
 
 Keygen::Keygen() {
@@ -22,12 +21,12 @@ Keygen::Keygen() {
 }
 
 /* generate next hexa key */
-Block Keygen::nextHexKey(Block key) {
+byte* Keygen::nextHexKey(byte* key) {
   
 }
 
 /* generate next byte key */
-Block Keygen::nextByteKey(Block key) {
+byte* Keygen::nextByteKey(byte* key) {
   
 }
 
@@ -35,7 +34,7 @@ Block Keygen::nextByteKey(Block key) {
  * bit_size : 4 (hexa key)
  *            8 (byte key)
  */
-Block nextKey(Block key, int bit_size) {
+byte* Keygen::nextKey(byte* key, int bit_size) {
   
 }
 

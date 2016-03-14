@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "global.h"
-//#include "keygen.h"
+#include "keygen.h"
 
 using namespace std;
 
@@ -33,6 +33,7 @@ struct Block {
   void set(int i, byte b) {
     bit[i] = b;
   }
+  void operator=(const Block&) const;
   Block operator+(const Block&) const;
   Block operator-(const Block&) const;
   Block operator^(const Block&) const;
@@ -49,6 +50,12 @@ struct Block {
   byte* bit = NULL;         // a container array, consist of byte/hex of Block
   int BIT_SIZE;             // 8 for byte, 4 for hex 
 };
+
+void Block::operator=(const Block& b) const {
+  for(int i = 0; i < BLOCK_SIZE; i++) {
+    bit[i] = b.bit[i];
+  }
+}
 
 Block Block::operator+(const Block& b) const {
   Block ret(BIT_SIZE);
@@ -119,11 +126,12 @@ Block Block::transpose() {
  **/
 Block Block::e_encrypt(Block key) {
   Block ret(BIT_SIZE);
+  Keygen keygen;
   ret = (*this >> 6) ^ (key << 9);
   ret = ret.rotate();
   ret = ret + key;
   ret = ret.rotate().rotate().rotate();
-  //ret = new Keygen()->nextKey(ret, BIT_SIZE);
+  ret = *(new Block(BIT_SIZE, keygen.nextKey(ret.bit, BIT_SIZE)));
   ret = ret.transpose();
   ret = ret ^ key;
   ret = ret.rotate().rotate();
@@ -135,6 +143,10 @@ Block Block::e_encrypt(Block key) {
  * Used in CBC
  **/
 Block Block::e_decrypt(Block key) {
+  Block ret(BIT_SIZE);
+  ret = this->rotate().rotate();
+  ret = ret ^ key;
+  ret = ret.transpose();
   
 }
 
