@@ -131,7 +131,7 @@ Block Block::e_encrypt(Block key) {
   ret = ret.rotate();
   ret = ret + key;
   ret = ret.rotate().rotate().rotate();
-  ret = *(new Block(BIT_SIZE, keygen.nextKey(ret.bit, BIT_SIZE)));
+  ret = Block(BIT_SIZE, keygen.nextKey(ret.bit, BIT_SIZE));
   ret = ret.transpose();
   ret = ret ^ key;
   ret = ret.rotate().rotate();
@@ -147,15 +147,21 @@ Block Block::e_decrypt(Block key) {
   ret = this->rotate().rotate();
   ret = ret ^ key;
   ret = ret.transpose();
+  ret = Block(BIT_SIZE, keygen.prevKey(ret.bit, BIT_SIZE));
+  ret = ret.rotate();
+  ret = ret - key;
+  ret = ret.rotate().rotate().rotate();
   
+  return ret;
 }
 
 /**
  * F function for ciphering hex (4 bit)
  * Used in Feistel network
+ * Basically the algo is the same with E function in CBC so just call the subprogram :)
  **/
 Block Block::f_encrypt(Block key) {
-  
+  return e_encrypt(key);
 }
 
 /**
@@ -163,7 +169,7 @@ Block Block::f_encrypt(Block key) {
  * Used in Feistel network
  **/
 Block Block::f_decyprt(Block key) {
-  
+  return e_decrypt(key);
 }
 
 #endif
