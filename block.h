@@ -4,7 +4,7 @@
 #include <algorithm>
 
 #include "global.h"
-#include "keygen.h"
+//#include "keygen.h"
 
 using namespace std;
 
@@ -123,7 +123,7 @@ Block Block::e_encrypt(Block key) {
   ret = ret.rotate();
   ret = ret + key;
   ret = ret.rotate().rotate().rotate();
-  ret = new Keygen()->nextKey(ret, BIT_SIZE);
+  //ret = new Keygen()->nextKey(ret, BIT_SIZE);
   ret = ret.transpose();
   ret = ret ^ key;
   ret = ret.rotate().rotate();
