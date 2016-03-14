@@ -9,9 +9,8 @@ struct Keygen {
   Keygen();
   byte* nextKey(byte*);
   
-  static Keygen* instance = NULL;
+  static Keygen* instance;
   byte* byte_table;
-  byte* hex_table;
 };
 
 Keygen::Keygen() {

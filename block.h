@@ -4,6 +4,8 @@
 #include <algorithm>
 #include "global.h"
 
+using namespace std;
+
 /* Block is 128-bit, all constant defined in global.h */
 struct Block {
   Block() {

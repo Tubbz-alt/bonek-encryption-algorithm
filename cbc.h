@@ -5,8 +5,8 @@
 
 struct Cbc {
   Cbc();
-  void encyprt(byte*, byte*);
-  void decrypt(byte*, byte*);
+  Block* encyprt(Block*, byte*);
+  Block* decrypt(Block*, byte*);
   
   Keygen keygen;
 };
@@ -15,11 +15,11 @@ Cbc::Cbc() {
   
 }
 
-void Cbc::encyprt(byte* plain, byte* key) {
+Block* Cbc::encyprt(Block* plain, byte* key) {
   
 }
 
-void Cbc::decrypt(byte* plain, byte* key) {
+Block* Cbc::decrypt(Block* plain, byte* key) {
   
 }
 

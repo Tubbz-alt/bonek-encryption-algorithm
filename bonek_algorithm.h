@@ -15,11 +15,11 @@ Bonek::Bonek() {
   
 }
 
-void Bonek::encyprt(byte* plain, byte* key) {
+byte* Bonek::encyprt(byte* plain, byte* key) {
   
 }
 
-void Bonek::decrypt(byte* cipher, byte* key) {
+byte* Bonek::decrypt(byte* cipher, byte* key) {
 
 }  
 
