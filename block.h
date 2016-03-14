@@ -144,6 +144,7 @@ Block Block::e_encrypt(Block key) {
  **/
 Block Block::e_decrypt(Block key) {
   Block ret(BIT_SIZE);
+  Keygen keygen;
   ret = this->rotate().rotate();
   ret = ret ^ key;
   ret = ret.transpose();
@@ -151,7 +152,7 @@ Block Block::e_decrypt(Block key) {
   ret = ret.rotate();
   ret = ret - key;
   ret = ret.rotate().rotate().rotate();
-  
+  ret = (ret ^ (key << 9)) << 6;
   return ret;
 }
 
