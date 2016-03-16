@@ -9,7 +9,7 @@ using namespace std;
 
 struct Cbc {
   Cbc();
-  vector<Block> encyprt(vector<Block>, byte*);
+  vector<Block> encrypt(vector<Block>, byte*);
   vector<Block> decrypt(vector<Block>, byte*);
   
   Keygen keygen;
@@ -19,7 +19,7 @@ Cbc::Cbc() {
   
 }
 
-vector<Block> Cbc::encyprt(vector<Block> plain, byte* key) {
+vector<Block> Cbc::encrypt(vector<Block> plain, byte* key) {
   vector<Block> cip;
   Keygen keygen;
   byte* pre = key;

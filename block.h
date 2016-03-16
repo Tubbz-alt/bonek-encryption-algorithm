@@ -24,6 +24,12 @@ struct Block {
       bit[i] = b[i];
     }
   }
+  Block(const Block& b) : BIT_SIZE(b.BIT_SIZE) {
+    bit = new byte[BLOCK_SIZE];
+    for(int i = 0; i < BLOCK_SIZE; i++) {
+      bit[i] = b.bit[i];
+    }
+  }
   ~Block() {
     delete [] bit;
   }
@@ -47,8 +53,8 @@ struct Block {
   Block f_encrypt(Block);
   Block f_decyprt(Block);
   
-  pair<Block, Block> decompose();
-  void combine(pair<Block, Block>);
+  pair<Block, Block> split();
+  void combine(Block, Block);
   
   byte* bit = NULL;         // a container array, consist of byte/hex of Block
   int BIT_SIZE;             // 8 for byte, 4 for hex 
@@ -176,7 +182,7 @@ Block Block::f_decyprt(Block key) {
   return e_decrypt(key);
 }
 
-pair<Block, Block> Block::decompose() {
+pair<Block, Block> Block::split() {
   Block fi(4), se(4);
   for(int i = 0; i < BLOCK_SIZE / 2; i++) {
     fi.bit[i * 2] = bit[i] % (1 << 4);
@@ -189,9 +195,7 @@ pair<Block, Block> Block::decompose() {
   return make_pair(fi, se);
 }
 
-void Block::combine(pair<Block, Block> b) {
-  Block fi = b.first;
-  Block se = b.second;
+void Block::combine(Block fi, Block se) {
   this->BIT_SIZE = 8;
   for(int i = 0; i < BLOCK_SIZE; i += 2) {
     this->bit[i/2] = fi.bit[i] | (fi.bit[i + 1] << 4);
