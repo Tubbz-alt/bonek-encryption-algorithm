@@ -10,8 +10,8 @@ using namespace std;
 
 struct Bonek {
   Bonek();
-  vector<Block> encyprt(vector<Block>, Block);
-  vector<Block> decrypt(vector<Block>, Block);
+  vector<Block> encrypt(vector<Block>, byte*);
+  vector<Block> decrypt(vector<Block>, byte*);
   
   Keygen keygen;
 };
@@ -20,7 +20,8 @@ Bonek::Bonek() {
   
 }
 
-vector<Block> Bonek::encyprt(vector<Block> plain, Block key) {
+vector<Block> Bonek::encrypt(vector<Block> plain, byte* K) {
+  Block key(8, K);
   Block ori_key = key;
   Keygen keygen;
   Cbc cbc;
@@ -47,7 +48,8 @@ vector<Block> Bonek::encyprt(vector<Block> plain, Block key) {
   return plain;
 }
 
-vector<Block> Bonek::decrypt(vector<Block> cipher, Block key) {
+vector<Block> Bonek::decrypt(vector<Block> cipher, byte* K) {
+  Block key(8, K);
   Block ori_key = key;
   Keygen keygen;
   Cbc cbc;
@@ -62,8 +64,8 @@ vector<Block> Bonek::decrypt(vector<Block> cipher, Block key) {
       Block keyfi(4), keyse(4);
       tie(keyfi, keyse) = key.split();
       for(int i = 0; i < cipher.size(); i++) {
-        cipher[i] = feistel.decrypt(cipher[i], keyfi.bit);
         cipher[i] = feistel.decrypt(cipher[i], keyse.bit);
+        cipher[i] = feistel.decrypt(cipher[i], keyfi.bit);
       }
     }
     key.bit = keygen.prevByteKey(key.bit);

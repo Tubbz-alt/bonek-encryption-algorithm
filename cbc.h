@@ -19,12 +19,14 @@ Cbc::Cbc() {
   
 }
 
-vector<Block> Cbc::encrypt(vector<Block> plain, byte* key) {
+vector<Block> Cbc::encrypt(vector<Block> plain, byte* k) {
+  Block K(8, k);
+  byte* key = K.bit;
   vector<Block> cip;
   Keygen keygen;
   byte* pre = key;
-  key = keygen.nextByteKey(key);
   for(int i = 0; i < plain.size(); i++) {
+    key = keygen.nextByteKey(key);
     plain[i] = plain[i] ^ Block(8, pre);
     cip.push_back(plain[i].e_encrypt(Block(8, key)));
     pre = cip.back().bit;
@@ -32,7 +34,9 @@ vector<Block> Cbc::encrypt(vector<Block> plain, byte* key) {
   return cip;
 }
 
-vector<Block> Cbc::decrypt(vector<Block> cipher, byte* key) {
+vector<Block> Cbc::decrypt(vector<Block> cipher, byte* k) {
+  Block K(8, k);
+  byte* key = K.bit;
   vector<Block> pres, keys, plain;
   Keygen keygen;
   pres.push_back(Block(8, key));
@@ -44,8 +48,8 @@ vector<Block> Cbc::decrypt(vector<Block> cipher, byte* key) {
     keys.push_back(Block(8, key));
   }
   for(int i = 0; i < cipher.size(); i++) {
-    cipher[i].e_decrypt(keys[i]);
-    plain.push_back(cipher[i] ^ pres[i]);
+    Block tmp = cipher[i].e_decrypt(keys[i]);
+    plain.push_back(tmp ^ pres[i]);
   }
   return plain;
 }

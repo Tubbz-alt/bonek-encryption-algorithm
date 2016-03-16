@@ -16,7 +16,7 @@ struct Block {
   }
   Block(int n) : BIT_SIZE(n) {
     bit = new byte[BLOCK_SIZE];
-    fill(bit, bit + BLOCK_SIZE, 0);
+    for(int i = 0; i < BLOCK_SIZE; i++) bit[i] = rand() % (1 << BIT_SIZE);
   }
   Block(int n, byte* b) : BIT_SIZE(n) {
     bit = new byte[BLOCK_SIZE];

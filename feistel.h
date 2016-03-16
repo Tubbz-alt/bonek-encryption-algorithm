@@ -22,7 +22,7 @@ Block Feistel::encrypt(Block plain, byte* key) {
   newfi = se;
   newse = se.f_encrypt(Block(4, key)) ^ fi;
   Block ret(8);
-  ret.combine(fi, se);
+  ret.combine(newfi, newse);
   return ret;
 }
 
@@ -30,9 +30,9 @@ Block Feistel::decrypt(Block cipher, byte* key) {
   Block fi(4), se(4), newfi(4), newse(4);
   tie(fi, se) = cipher.split();
   newse = fi;
-  newfi = se ^ fi.f_encrypt(Block(4, key));
+  newfi = fi.f_encrypt(Block(4, key)) ^ se;
   Block ret(8);
-  ret.combine(fi, se);
+  ret.combine(newfi, newse);
   return ret;
 }
 
