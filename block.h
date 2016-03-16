@@ -47,6 +47,9 @@ struct Block {
   Block f_encrypt(Block);
   Block f_decyprt(Block);
   
+  pair<Block, Block> decompose();
+  void combine(pair<Block, Block>);
+  
   byte* bit = NULL;         // a container array, consist of byte/hex of Block
   int BIT_SIZE;             // 8 for byte, 4 for hex 
 };
@@ -171,6 +174,29 @@ Block Block::f_encrypt(Block key) {
  **/
 Block Block::f_decyprt(Block key) {
   return e_decrypt(key);
+}
+
+pair<Block, Block> Block::decompose() {
+  Block fi(4), se(4);
+  for(int i = 0; i < BLOCK_SIZE / 2; i++) {
+    fi.bit[i * 2] = bit[i] % (1 << 4);
+    fi.bit[i * 2 + 1] = (bit[i] / (1 << 4)) % (1 << 4);
+  }
+  for(int i = 0; i < BLOCK_SIZE / 2; i++) {
+    se.bit[i * 2] = bit[i + BLOCK_SIZE/2] % (1 << 4);
+    se.bit[i * 2 + 1] = (bit[i + BLOCK_SIZE/2] >> 4) % (1 << 4);
+  }
+  return make_pair(fi, se);
+}
+
+void Block::combine(pair<Block, Block> b) {
+  Block fi = b.first;
+  Block se = b.second;
+  this->BIT_SIZE = 8;
+  for(int i = 0; i < BLOCK_SIZE; i += 2) {
+    this->bit[i/2] = fi.bit[i] | (fi.bit[i + 1] << 4);
+    this->bit[i/2 + BLOCK_SIZE/2] = se.bit[i] | (se.bit[i + 1] << 4);
+  }
 }
 
 #endif
