@@ -29,18 +29,12 @@ int getFileSize(FILE* file) {
 }
 
 vector<byte> read_binary(char* name) {
-  //printf("init %s length %d\n", name, strlen(name));
   vector<byte> plain;
-  //printf("Reading binary file...\n");
   FILE* file = fopen(name, "rb");
-  //printf("file %d\n", file);
-  //printf("Error %d\n", errno);
   int fileSize = getFileSize(file);
   byte* filebuf = new byte[fileSize];
-  //printf("get filesize done\n");
   fread(filebuf, fileSize, 1, file);
   fclose(file);
-  //printf("pindah ke filebuf done\n");
   for(int i = 0; i < fileSize; i++) {
     plain.push_back((byte) filebuf[i]);
   }
@@ -131,7 +125,6 @@ int main(int argc, char** argv)
     printf("No byte added\n");
   }
   vector<Block> from = byte_to_block(v), to;
-  //printf("Before :\n"); print(from);
   
   Bonek bonek;
   if(string(argv[1]) == "enc") {
@@ -143,9 +136,7 @@ int main(int argc, char** argv)
     to = bonek.decrypt(from, key);
     puts("Decrypting success!");
   }
-  //printf("\nAfter :\n"); print(to);
   vector<byte> output = block_to_byte(to);
-  //printf("\nByte :\n"); print(output);
   flush_to_file(output, file_out);
   return 0;
 }
