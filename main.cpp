@@ -56,7 +56,7 @@ byte* hexa_to_byte(char* s) {
   for(int i = 0; i < n; i += 2) {
     int a = ('0' <= s[i] && s[i] <= '9'? s[i] - '0' : s[i] - 'a' + 10);
     int b = ('0' <= s[i+1] && s[i+1] <= '9'? s[i+1] - '0' : s[i+1] - 'a' + 10);
-    ret[i] = (b << 4) | a;
+    ret[i/2] = (b << 4) | a;
   }
   return ret;
 }
