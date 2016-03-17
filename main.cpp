@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <errno.h>
 
 #include "bonek_algorithm.h"
 #include "global.h"
@@ -14,16 +15,17 @@ int getFileSize(FILE* file) {
 }
 
 vector<byte> read_binary(char* name) {
-  printf("init %s\n", name);
-  FILE* file = NULL;
+  printf("init %s length %d\n", name, strlen(name));
   vector<byte> plain;
   printf("Reading binary file...\n");
-  assert(file = fopen(name, "rb"));
-  printf("assert done\n");
+  FILE* file = fopen(name, "r");
+  printf("file %d\n", file);
+  printf("Error %d\n", errno);
   int fileSize = getFileSize(file);
   byte* filebuf = new byte[fileSize];
   printf("get filesize done\n");
   fread(filebuf, fileSize, 1, file);
+  fclose(file);
   printf("pindah ke filebuf done\n");
   for(int i = 0; i < fileSize; i++) {
     plain.push_back((byte) filebuf[i]);
@@ -78,9 +80,12 @@ vector<byte> block_to_byte(vector<Block> b) {
   }
   return ret;
 }
-
+/*
+e enc C:\Users\Luqman%20A.%20Siswanto\Code\bonek-encryption-algorithm/in.pdf out.pdf 00000aaaaa00000aaaaa00000aaaaafc
+*/
 int main(int argc, char** argv)
 {
+  errno = 0;
   if(argc != 5) {
     puts("Usage : main [enc/dec][file_masuk][file_keluar][key]");
     exit(0);
