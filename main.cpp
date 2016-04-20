@@ -108,6 +108,8 @@ int main(int argc, char** argv)
     puts("Key invalid. Use 32 hexa char from 0..9 to a..f");
     exit(1);
   }
+  auto start = std::chrono::high_resolution_clock::now();
+  
   printf("%s %s %s %s %s\n", argv[0], argv[1], argv[2], argv[3], argv[4]);
   char* type = argv[1];
   char* file_in = argv[2];
@@ -138,5 +140,9 @@ int main(int argc, char** argv)
   }
   vector<byte> output = block_to_byte(to);
   flush_to_file(output, file_out);
+  
+  auto elapsed = std::chrono::high_resolution_clock::now() - start;
+  long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
+  printf("Time needed : %.15f milliseconds\n", microseconds / 1000.);
   return 0;
 }
